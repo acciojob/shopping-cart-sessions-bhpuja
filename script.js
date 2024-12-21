@@ -1,6 +1,4 @@
-// This is the boilerplate code given for you
-// You can modify this code
-// Product data
+// Sample Product Data
 const products = [
   { id: 1, name: "Product 1", price: 10 },
   { id: 2, name: "Product 2", price: 20 },
@@ -9,30 +7,64 @@ const products = [
   { id: 5, name: "Product 5", price: 50 },
 ];
 
-// DOM elements
+// DOM Elements
 const productList = document.getElementById("product-list");
+const cartList = document.getElementById("cart-list");
+const clearCartBtn = document.getElementById("clear-cart-btn");
 
-// Render product list
+// Load Cart from Session Storage
+let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+// Render Product List
 function renderProducts() {
+  productList.innerHTML = ""; // Clear existing products
   products.forEach((product) => {
     const li = document.createElement("li");
-    li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
+    li.textContent = `${product.name} - $${product.price}`;
+    const addToCartBtn = document.createElement("button");
+    addToCartBtn.textContent = "Add to Cart";
+    addToCartBtn.onclick = () => addToCart(product);
+    li.appendChild(addToCartBtn);
     productList.appendChild(li);
   });
 }
 
-// Render cart list
-function renderCart() {}
+// Render Cart
+function renderCart() {
+  cartList.innerHTML = ""; // Clear existing cart
+  cart.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.textContent = `${item.name} - $${item.price}`;
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.onclick = () => removeFromCart(index);
+    li.appendChild(removeBtn);
+    cartList.appendChild(li);
+  });
 
-// Add item to cart
-function addToCart(productId) {}
+  // Update session storage
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+}
 
-// Remove item from cart
-function removeFromCart(productId) {}
+// Add Product to Cart
+function addToCart(product) {
+  cart.push(product);
+  renderCart();
+}
 
-// Clear cart
-function clearCart() {}
+// Remove Product from Cart
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  renderCart();
+}
 
-// Initial render
+// Clear Cart
+clearCartBtn.addEventListener("click", () => {
+  cart = [];
+  renderCart();
+});
+
+// Initialize
 renderProducts();
 renderCart();
+
