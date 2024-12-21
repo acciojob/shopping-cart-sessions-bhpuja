@@ -17,6 +17,7 @@ function loadProducts() {
     
     const addButton = document.createElement('button');
     addButton.textContent = 'Add to Cart';
+    addButton.classList.add('add-to-cart-btn');
     addButton.onclick = () => addToCart(product);
     
     li.appendChild(addButton);
@@ -66,4 +67,5 @@ window.onload = () => {
   loadProducts();
   loadCart();
 };
+
 
